@@ -1,0 +1,31 @@
+Notes on ILI9341 data transmition
+Documentation URL: http://www.lcdwiki.com/res/MSP2807/ILI9341%20Datasheet.pdf
+
+Pages of note:
+	how a pixel is sent (16 bit representation): 63
+	write cycle sequence: 33-35
+	page address set command: 112
+
+We will use 4 wire mode
+	PA1 - Reset
+	PA4 - Chip Select (CS / CSX)
+	PA5 - Serial Clock (SCL)
+	PA6 - Data/Command (D/CX)
+	PA7 - MOSI (SDA / data)
+
+SPI settings:
+	Data Size = 8bits
+	MSB First
+	Prescaller is set currently to 8, but can be lowered in the future to speed up refresh rate.
+	Check CPOL/Mode setting!
+
+DMA settings:
+	Data Width = 8bits
+	Increment Memory Address
+	Source: Memory 
+	Destination: SPI1
+	Priority: High
+	Possibly enable circular mode?
+
+Notes:
+	HAL_SPI_Transmit_DMA(&hspi, txBuffer, sizeof(txBuffer));
