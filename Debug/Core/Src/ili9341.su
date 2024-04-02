@@ -6,7 +6,7 @@
 ../Core/Src/ili9341.c:43:13:ILI9341_SetAddressWindow	32	static
 ../Core/Src/ili9341.c:62:6:ILI9341_Init	120	static
 ../Core/Src/ili9341.c:219:6:ILI9341_MinecraftInit	32	static
-../Core/Src/ili9341.c:240:6:ILI9341_renderMinecraft	168	static
-../Core/Src/ili9341.c:361:6:ILI9341_FillRectangle	32	static
-../Core/Src/ili9341.c:411:6:ILI9341_FillScreen	24	static
-../Core/Src/ili9341.c:415:6:ILI9341_DrawPixel	24	static
+../Core/Src/ili9341.c:240:6:ILI9341_renderMinecraft	176	static
+../Core/Src/ili9341.c:378:6:ILI9341_FillRectangle	32	static
+../Core/Src/ili9341.c:428:6:ILI9341_FillScreen	24	static
+../Core/Src/ili9341.c:432:6:ILI9341_DrawPixel	24	static

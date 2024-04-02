@@ -237,7 +237,7 @@ void ILI9341_MinecraftInit() {
     }
 }
 
-void ILI9341_renderMinecraft(float ox) {
+void ILI9341_renderMinecraft(float oy) {
 
     ILI9341_Select();
     ILI9341_SetAddressWindow(0, 0, ILI9341_WIDTH, ILI9341_HEIGHT);
@@ -247,8 +247,8 @@ void ILI9341_renderMinecraft(float ox) {
     float xRot = 1.5;
     float yRot = 0.0;
 
-    //float ox = 16.5;
-    float oy = 14.5;
+    float ox = 14.5;
+    //float oy = 14.5;
     float oz = 14.5;
 
     float yCos = cos(yRot);
@@ -256,38 +256,38 @@ void ILI9341_renderMinecraft(float ox) {
     float xCos = cos(xRot);
     float xSin = sin(xRot);
 
-    for ( int x = 0; x < ILI9341_WIDTH; x++) {
-        float ___xd = (x - ILI9341_WIDTH / 2) / (float)ILI9341_HEIGHT;
-        for ( int y = 0; y < ILI9341_HEIGHT; y++) {
-            float __yd = (y - ILI9341_HEIGHT / 2) / (float)ILI9341_HEIGHT;
+    for (int y = 0; y < ILI9341_HEIGHT; y++) {
+        float ___yd = (y - ILI9341_HEIGHT / 2) / (float)ILI9341_WIDTH;
+        for (int x = 0; x < ILI9341_WIDTH; x++) {
+            float __xd = (x - ILI9341_WIDTH / 2) / (float)ILI9341_WIDTH;
             float __zd = 1;
 
-            float ___zd = __zd * yCos + __yd * ySin;
-            float _yd = __yd * yCos - __zd * ySin;
+            float ___xd = __xd * yCos + ___yd * ySin;
+            float _xd = ___yd * yCos - __xd * ySin;
 
-            float _xd = ___xd * xCos + ___zd * xSin;
-            float _zd = ___zd * xCos - ___xd * xSin;
+            float _yd = ___xd * xCos + __zd * xSin;
+            float _zd = __zd * xCos - ___xd * xSin;
 
             int col = 0;
             int br = 255;
             int ddist = 0;
 
             float closest = 32;
-            for ( float d = 0; d < 3; d++) {
-            	float dimLength = _xd;
+            for (float d = 0; d < 3; d++) {
+                float dimLength = _yd;
                 if (d == 1)
-                    dimLength = _yd;
+                    dimLength = _xd;
                 if (d == 2)
                     dimLength = _zd;
 
                 float ll = 1 / (dimLength < 0 ? -dimLength : dimLength);
-                float xd = (_xd) * ll;
-                float yd = (_yd) * ll;
+                float xd = (_yd) * ll;
+                float yd = (_xd) * ll;
                 float zd = (_zd) * ll;
 
-                float initial = ox - (int)ox;
+                float initial = oy - (int)oy;
                 if (d == 1)
-                    initial = oy - (int)oy;
+                    initial = ox - (int)ox;
                 if (d == 2)
                     initial = oz - (int)oz;
                 if (dimLength > 0)
@@ -295,21 +295,21 @@ void ILI9341_renderMinecraft(float ox) {
 
                 float dist = ll * initial;
 
-                float xp = ox + xd * initial;
-                float yp = oy + yd * initial;
+                float xp = oy + xd * initial;
+                float yp = ox + yd * initial;
                 float zp = oz + zd * initial;
 
                 if (dimLength < 0) {
                     if (d == 0)
-                        xp--;
-                    if (d == 1)
                         yp--;
+                    if (d == 1)
+                        xp--;
                     if (d == 2)
                         zp--;
                 }
 
                 while (dist < closest) {
-                	int tex = map[((int)zp & 15) * 16 * 16 | ((int)yp & 15) * 16 | ((int)xp & 15)];
+                    int tex = map[((int)zp & 15) * 16 * 16 | ((int)yp & 15) * 16 | ((int)xp & 15)];
 
                     if (tex > 0) {
                         int u = ((int)(xp + zp) * 16) & 15;
@@ -317,11 +317,26 @@ void ILI9341_renderMinecraft(float ox) {
                         if (d == 1) {
                             u = ((int)(xp * 16) & 15);
                             v = ((int)(zp * 16) & 15);
-                            if (yd < 0)
-                                v += 32;
+                            if (xd < 0)
+                                u += 32;
                         }
 
-                        unsigned int cc = 0xFFFFFFFF;
+                        unsigned int cc;
+
+                        /*switch(tex) {
+                        case 2: cc = cc = 0xFFFFFF00; break;
+                        case 3: cc = cc = 0xFFFF00FF; break;
+                        case 4: cc = cc = 0xFF00FFFF; break;
+                        default: cc = 0xFFFFFFFF;
+                        }*/
+
+                        switch(tex) {
+                        case 2: cc = cc = 0x000000FF; break;
+                        case 3: cc = cc = 0x0000FF00; break;
+                        case 4: cc = cc = 0x00FF0000; break;
+                        default: cc = 0xFFFFFFFF;
+                        }
+
                         if (cc > 0) {
                             col = cc;
                             ddist = 255 - (int)((dist / 32 * 255));
@@ -350,13 +365,15 @@ void ILI9341_renderMinecraft(float ox) {
             // Extract and map blue component (5 bits)
             result |= (b >> 3) & 0x1F;
 
-            ILI9341_DrawPixel(x, y, result);
-            //HAL_SPI_Transmit(&ILI9341_SPI_PORT, result, sizeof(result), HAL_MAX_DELAY);
+            uint8_t data[] = {(char)((result >> 8) & 0xFF), (char)(result & 0xFF)};
+
+            HAL_SPI_Transmit(&ILI9341_SPI_PORT, data, sizeof(data), HAL_MAX_DELAY);
         }
     }
 
     ILI9341_Unselect();
 }
+
 
 void ILI9341_FillRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color) {
     // clipping
