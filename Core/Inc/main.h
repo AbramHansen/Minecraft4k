@@ -57,6 +57,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SPI2_ChipSelect_Pin GPIO_PIN_0
+#define SPI2_ChipSelect_GPIO_Port GPIOC
+#define SPI2_Reset_Pin GPIO_PIN_1
+#define SPI2_Reset_GPIO_Port GPIOC
+#define SPI2_DC_Pin GPIO_PIN_2
+#define SPI2_DC_GPIO_Port GPIOC
 #define Reset_Pin GPIO_PIN_1
 #define Reset_GPIO_Port GPIOA
 #define USART_TX_Pin GPIO_PIN_2
@@ -71,6 +77,8 @@ void Error_Handler(void);
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+#define SPI_CS_Pin GPIO_PIN_2
+#define SPI_CS_GPIO_Port GPIOD
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
 
