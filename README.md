@@ -1,4 +1,4 @@
-#STM32L476RG powered VR
+# STM32L476RG powered VR
 
 [Video Demonstration](https://youtu.be/92BfKU-lSgw)
 
