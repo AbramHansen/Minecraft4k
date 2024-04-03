@@ -1,4 +1,6 @@
-# Ghetto STM32L476RG powered VR
+#STM32L476RG powered VR
+
+[Video Demonstration](https://youtu.be/92BfKU-lSgw)
 
 [3D demo code ported from the JavaScript Version of Minecraft4k by Markus Persson](https://jsfiddle.net/uzMPU)
 
